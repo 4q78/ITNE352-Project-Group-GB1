@@ -50,7 +50,40 @@ def Clients(ClientSocket,address):
             ClientSocket.send(json.dumps(Dictactual,indent=4).encode('utf-8'))
             ClientSocket.send(json.dumps(DictTerminal,indent=4).encode('utf-8'))
             ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
+         if message=='2':
+            with open('GB1.json','r') as k:
+               reader=json.load(k)
+               iata=[]
+               airport=[]
+               Dactual=[]
+               estimated=[]
+               arrivalTerminal=[]
+               arrivalDelay=[]
+               gate=[]
 
+               for search in reader['data']:
+                  if search['departure']['delay']!='null' or search['arrival']['delay']!='null':
+                     iata.append(search['flight']['iata'])
+                     airport.append(search['departure']['airport'])
+                     Dactual.append(search['departure']['actual'])
+                     estimated.append(search['arrival']['estimated'])
+                     arrivalTerminal.append(search['arrival']['terminal'])
+                     arrivalDelay.append(search['arrival']['delay'])
+                     gate.append(search['arrival']['gate'])
+            Dictiata={'iata':iata}
+            Dictairport={'airport':airport}
+            DictDactual={'departure':Dactual}
+            Dictestimated={'estimated':estimated}
+            DictATerminal={'termianl':arrivalTerminal}
+            DictADelay={'delay':arrivalDelay}
+            Dictgate={'gate':gate}
+            ClientSocket.send(json.dumps(Dictiata,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(Dictairport,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(DictDactual,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(Dictestimated,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(DictATerminal,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(DictADelay,indent=4).encode('utf-8'))
+            ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
 
                      
                   
