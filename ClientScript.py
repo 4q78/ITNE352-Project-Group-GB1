@@ -12,11 +12,14 @@ while option!=0:
        print("5. Quit")
        option=input("Enter the Flight option(not number)\n")
        client.sendto(option.encode('utf-8'),("127.0.0.1",9999)) 
-       if option.casefold=="arrived flights":
+       if option=='1':
          print(client.recv(2048).decode('utf-8'))
+         print(client.recv(2048).decode('utf-8'))
+         print(client.recv(2048).decode('utf-8'))
+         print(client.recv(2048).decode('utf-8'))
+         print(client.recv(2048).decode('utf-8'))
+         
          
 
        if option=='5':
-           client.sendto("quit".encode('utf-8'),("127.0.0.1",9999))
-           print(client.recvfrom(1024)[0].decode('utf-8'))
-           break
+           client.close()
