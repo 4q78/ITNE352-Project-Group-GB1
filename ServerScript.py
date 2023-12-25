@@ -2,10 +2,13 @@ import requests
 import json
 import socket
 import threading
+import time
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind(("127.0.0.1",6666))
 server.listen(3)
-code=input("Enter the airport code\n")
+print("Waiting for connection....")
+timeoutSec=60
+'''code=input("Enter the airport code\n")
 params = {
     'access_key': '1d815a01512667373760dd9a41070d0f',
     'arr_icao': code,
@@ -17,16 +20,22 @@ def apiParameters(params):
        with open("GB1.json","w") as k:
          json.dump(data,k,indent=4)
          print("File saved")
-apiParameters(params=params)
+apiParameters(params=params)'''
 def Clients(ClientSocket,address):
     print(f'connected to {address}')
-    Namemessage=ClientSocket.recv(1024).decode('utf-8')
-    print(Namemessage)
-    message=ClientSocket.recv(1024).decode('utf-8')
-    x=True
-    while x:
+    ClientSocket.settimeout(timeoutSec)     
+    try:
+      Namemessage=ClientSocket.recv(1024).decode('utf-8')
+      print(Namemessage)
+      message=ClientSocket.recv(1024).decode('utf-8')
+      if not message or not Namemessage:
+         raise socket.timeout
+      x=True
+      while x:
          if message=='1':  
-            print(f'name:{Namemessage} |type of request: All arrived flights (return flight IATA code, departure airport name,\n arrival time, arrival terminal number, and arrival gate).')      
+            print(f'name:{Namemessage} |type of request: All arrived flights (return flight IATA code, departure airport name,\n arrival time, arrival terminal number, and arrival gate).')
+            print(80*"-")
+            print()     
             with open('GB1.json','r') as k:
                reader=json.load(k)
                iata=[]
@@ -54,6 +63,8 @@ def Clients(ClientSocket,address):
             ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
          if message=='2':
             print(f'name:{Namemessage} |type of request: All delayed flights (return flight IATA code, departure airport,\n original departure time, the estimated time of arrival), arrival terminal, delay, and arrival gate.')
+            print(80*"-")
+            print()
             with open('GB1.json','r') as k:
                reader=json.load(k)
                iata=[]
@@ -65,7 +76,7 @@ def Clients(ClientSocket,address):
                gate=[]
 
                for search in reader['data']:
-                  if search['departure']['delay']!='null' or search['arrival']['delay']!='null':
+                  if search['departure']['delay']!='null' or search['arrival']['delay']!='null': #Need to check for the condition
                      iata.append(search['flight']['iata'])
                      airport.append(search['departure']['airport'])
                      Dactual.append(search['departure']['actual'])
@@ -89,6 +100,8 @@ def Clients(ClientSocket,address):
             ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
          if message=='3':
             print(f'name:{Namemessage} | type of request: All flights from a specific airport using the airport ICAO code (return flight IATA code, \n departure airport, original departure time, estimated arrival time, departure gate, arrival gate, and status).')
+            print(80*"-")
+            print()
             message=ClientSocket.recv(1024).decode('utf-8')
             with open('GB1.json','r') as k:
                reader=json.load(k)
@@ -128,6 +141,8 @@ def Clients(ClientSocket,address):
             ClientSocket.send(json.dumps(Dictstatus,indent=4).encode('utf-8'))
          if message=='4':
             print(f'name:{Namemessage} |type of request: Details of a particular flight (return flight IATA code; \n departure airport,gate, and terminal; arrival airport, gate, and terminal; \n status; scheduled departure time; and scheduled arrival time).')
+            print(80*"-")
+            print()
             message=ClientSocket.recv(1024).decode('utf-8')
             with open('GB1.json','r') as k:
                reader=json.load(k)
@@ -144,7 +159,7 @@ def Clients(ClientSocket,address):
                
 
                for search in reader['data']:
-                  if search['flight']['number']==message:
+                  if search['flight']['number']==message: #Need to check
                      iata.append(search['flight']['iata'])
                      airport.append(search['departure']['airport'])
                      DepGate.append(search['departure']['gate'])
@@ -182,8 +197,17 @@ def Clients(ClientSocket,address):
             print(f"Client {Namemessage} has disconnected")
             x=False
          message=ClientSocket.recv(1024).decode('utf-8')
-    else:
+         if not message or not Namemessage:
+            return
+      else:
        ClientSocket.close()
+    except socket.timeout:
+       print(f"Client {address} timed out. Closing the connection.")
+       print() 
+       return
+    finally:
+       ClientSocket.close()
+          
          
 while True:
     ClientSocket,address=server.accept()
