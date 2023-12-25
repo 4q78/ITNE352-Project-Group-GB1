@@ -2,10 +2,12 @@ import requests
 import json
 import socket
 import threading
+import time
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind(("127.0.0.1",6666))
 server.listen(3)
-code=input("Enter the airport code\n")
+timeoutSec=60
+'''code=input("Enter the airport code\n")
 params = {
     'access_key': '1d815a01512667373760dd9a41070d0f',
     'arr_icao': code,
@@ -17,14 +19,18 @@ def apiParameters(params):
        with open("GB1.json","w") as k:
          json.dump(data,k,indent=4)
          print("File saved")
-apiParameters(params=params)
+apiParameters(params=params)'''
 def Clients(ClientSocket,address):
     print(f'connected to {address}')
-    Namemessage=ClientSocket.recv(1024).decode('utf-8')
-    print(Namemessage)
-    message=ClientSocket.recv(1024).decode('utf-8')
-    x=True
-    while x:
+    ClientSocket.settimeout(timeoutSec)
+    try:
+       Namemessage=ClientSocket.recv(1024).decode('utf-8')
+       print(Namemessage)
+       message=ClientSocket.recv(1024).decode('utf-8')
+       if not message or not Namemessage:
+          return
+       x=True
+       while x:
          if message=='1':  
             print(f'name:{Namemessage} |type of request: All arrived flights (return flight IATA code, departure airport name,\n arrival time, arrival terminal number, and arrival gate).')      
             with open('GB1.json','r') as k:
@@ -182,8 +188,12 @@ def Clients(ClientSocket,address):
             print(f"Client {Namemessage} has disconnected")
             x=False
          message=ClientSocket.recv(1024).decode('utf-8')
-    else:
-       ClientSocket.close()
+         if not message or not Namemessage:
+          return 
+       else:
+        ClientSocket.close()
+    except socket.timeout:
+            print(f"Client {address} timed out. Closing the connection.")
          
 while True:
     ClientSocket,address=server.accept()
