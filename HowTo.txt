@@ -1,0 +1,14 @@
+How to run server script and client script:
+1.intall the required packages if not installed for example("requests") using pip install <package name>
+2.Through the terminal, navigate to the directory that has the saved files
+3.Split the terminal(one for server and the other\others for client\clients)
+4.To run the server or client script you type > python <file name>
+5.Once the server and client is connected you will need to type your username and password (if correct you will get access to the server as a client) 
+as for the server it will require you to enter the arrival icao code to choose the arrival country 
+so that the server obtain this information related to the specific country using api
+6.Then, in the client script the server will require a name from you to identify you from other clients 
+7.Next you will press enter to start and then the option menu will be displayed to you 
+8.You will choose the option you require and the server will answer your request
+9.if you desired to choose option 3 or 4, if 3 you will need to type the departure airport to obtain all the flights coming from a specific city, 
+if 4 you will need to type the flight iata code to obtain the details about a particular flight
+10.you can keep requesting until your done you will press option 5 and quit
