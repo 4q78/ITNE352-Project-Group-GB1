@@ -27,7 +27,7 @@ while True:
     break
 name=inputimeout(prompt="Enter your name:", timeout=60)
 client.send(name.encode('utf-8'))
-option=inputimeout(prompt="press Enter to start\n",timeout=60)
+option=input("press Enter to start\n")
 while option!='0':
   print("1. print All Arrived flights")
   print("2. print All delayed flights")
