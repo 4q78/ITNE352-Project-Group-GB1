@@ -7,7 +7,7 @@ import sqlite3
 import hashlib
 server=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind(("127.0.0.1",6666))
-server.listen(3)
+server.listen()
 print("Wating for connection....")
 timeoutSec=60
 '''code=input("Enter the airport code\n")
@@ -33,8 +33,8 @@ def Clients(ClientSocket,address):
        message=ClientSocket.recv(1024).decode('utf-8')
        if not message or not Namemessage:
           raise socket.timeout
-       x=True
-       while x:
+       loop_control=True
+       while loop_control:
          if message=='1':  
             print(f'name:{Namemessage} |type of request: All arrived flights (return flight IATA code, departure airport name,\n arrival time, arrival terminal number, and arrival gate).')    
             print(80*"-")
@@ -198,7 +198,7 @@ def Clients(ClientSocket,address):
             ClientSocket.send(json.dumps(DictSAT,indent=4).encode('utf-8'))
          if message=='5':
             print(f"Client {Namemessage} has disconnected")
-            x=False
+            loop_control=False
          message=ClientSocket.recv(1024).decode('utf-8')
          if not message or not Namemessage:
           return 

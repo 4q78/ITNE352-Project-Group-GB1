@@ -1,9 +1,9 @@
 import socket
 import time
 from inputimeout import inputimeout 
-x=True
+loop_control=True
 exceptTest=False
-while x:
+while loop_control:
    try:
     client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     client.connect(("127.0.0.1",6666))
@@ -15,7 +15,7 @@ while x:
      time.sleep(8)
      exceptTest=True
    if not exceptTest:
-     x=False
+     loop_control=False
 while True:
   message=client.recv(1024).decode('utf-8')
   client.send(input(message).encode())
@@ -41,6 +41,8 @@ while option!='0':
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
+    print(80*"-")
+    print()
   if option=='2':
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
@@ -50,16 +52,22 @@ while option!='0':
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
+    print(80*"-")
+    print()
   if option=='3':
     message=input("Enter deparure airport:")
     client.send(message.encode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
+    print(80*"-")
+    print()
   if option=='4':
     message=input("Enter the flight iata:")
     client.send(message.encode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
     print(client.recv(2048).decode('utf-8'))
+    print(80*"-")
+    print()
   if option=='5':
     break
    
