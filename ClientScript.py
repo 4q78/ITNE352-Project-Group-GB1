@@ -3,6 +3,7 @@ import time
 from inputimeout import inputimeout 
 loop_control=True
 exceptTest=False
+#keep trying to connect each 8 seconds if server is offline
 while loop_control:
    try:
     client=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -16,7 +17,7 @@ while loop_control:
      exceptTest=True
    if not exceptTest:
      loop_control=False
-while True:
+while True:#login credintials exchange with the server
   message=client.recv(1024).decode('utf-8')
   client.send(input(message).encode())
   message=client.recv(1024).decode('utf-8')
@@ -25,7 +26,7 @@ while True:
   print(message)
   if message.casefold()=="login successful!":
     break
-name=inputimeout(prompt="Enter your name:", timeout=240)
+name=inputimeout(prompt="Enter your name:", timeout=240) #inputimeout instead of regular input to help with user being inactive
 client.send(name.encode('utf-8'))
 option=input("press Enter to start\n")
 while option!='0':

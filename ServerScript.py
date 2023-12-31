@@ -10,12 +10,13 @@ server.bind(("127.0.0.1",6666))
 server.listen()
 print("Wating for connection....")
 timeoutSec=240
-code=input("Enter the airport code\n")
+code=input("Enter the airport code(arr_icao)\n")
 params = {
     'access_key': '1d815a01512667373760dd9a41070d0f',
     'arr_icao': code,
     'limit': 100
 }
+# function returns api information and store it in .json file
 def apiParameters(params): 
        api=requests.get('http://api.aviationstack.com/v1/flights',params=params)
        data=api.json()
@@ -23,6 +24,7 @@ def apiParameters(params):
          json.dump(data,file,indent=4)
          print("File saved")
 apiParameters(params=params)
+# function that will deal with all clients and will take clientsocket and address as parameter to seperate between each client(deal with all requests after checking credintials)
 def Clients(ClientSocket,address):
     print(f'connected to {address}')
     ClientSocket.settimeout(timeoutSec)
@@ -204,14 +206,15 @@ def Clients(ClientSocket,address):
           return 
        else:
         ClientSocket.close()
-    except socket.timeout:
+    except socket.timeout: #handle client being inactive
             print(f"Client {address} timed out. Closing the connection...")
             print() 
             return
-    except ConnectionResetError:
+    except ConnectionResetError: #handle client crash 
             print(f"Client {address} was forcibly closed or crashed. Closing the connection..." )
-    finally:
+    finally: # whether we went through exception or not at last close the connection
        ClientSocket.close()
+# function to check clients credintials before accessing the server and it will be called at the beggining of the clients function that deal with the requests
 def check_client_login(ClientSocket):
    while True:
     ClientSocket.send("username: ".encode('utf-8'))
@@ -227,7 +230,7 @@ def check_client_login(ClientSocket):
        break
     else:
        ClientSocket.send("login failed!".encode('utf-8'))
-
+# a loop that will wait for clients and each client that is connected will have his own running thread to run multiple clients simultaneously
 while True:
     ClientSocket,address=server.accept()
     threading.Thread(target=Clients,args=(ClientSocket,address)).start()        
