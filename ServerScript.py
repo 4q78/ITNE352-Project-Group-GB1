@@ -10,7 +10,7 @@ server.bind(("127.0.0.1",6666))
 server.listen()
 print("Wating for connection....")
 timeoutSec=240
-'''code=input("Enter the airport code(arr_icao)\n")
+code=input("Enter the airport code(arr_icao)\n")
 params = {
     'access_key': '1d815a01512667373760dd9a41070d0f',
     'arr_icao': code,
@@ -23,7 +23,7 @@ def apiParameters(params):
        with open("GB1.json","w") as file:
          json.dump(data,file,indent=4)
          print("File saved")
-apiParameters(params=params)'''
+apiParameters(params=params)
 # function that will deal with all clients and will take clientsocket and address as parameter to seperate between each client(deal with all requests after checking credintials)
 def Clients(ClientSocket,address):
     print(f'connected to {address}')
@@ -195,7 +195,7 @@ def Clients(ClientSocket,address):
             return
     except ConnectionResetError: #handle client crash 
             print(f"Client {address} was forcibly closed or crashed. Closing the connection..." )
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:#handle keyboard interrupt(cntrl+c)
         print(f"Ctrl+C pressed by client {address}. Closing the connection...")
     finally: # whether we went through exception or not at last close the connection
        ClientSocket.close()

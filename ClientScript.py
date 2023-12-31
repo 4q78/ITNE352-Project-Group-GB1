@@ -26,10 +26,11 @@ while True:#login credintials exchange with the server
   print(message)
   if message.casefold()=="login successful!":
     break
-name=inputimeout(prompt="Enter your name:", timeout=240) #inputimeout instead of regular input to help with user being inactive
-client.send(name.encode('utf-8'))
-option=input("press Enter to start\n")
 try:
+ name=inputimeout(prompt="Enter your name:", timeout=240) #inputimeout instead of regular input to help with user being inactive
+ client.send(name.encode('utf-8'))
+ option=input("press Enter to start\n")
+
  while option!='0':
   print("1. print All Arrived flights")
   print("2. print All delayed flights")
@@ -57,7 +58,7 @@ try:
        print()
        break
   if option=='3':
-    message=input("Enter deparure airport:")
+    message=input("Enter departure airport:")
     client.send(message.encode('utf-8'))
     dataRecieved=True
     while dataRecieved:
