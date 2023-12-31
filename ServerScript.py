@@ -10,7 +10,7 @@ server.bind(("127.0.0.1",6666))
 server.listen()
 print("Wating for connection....")
 timeoutSec=240
-code=input("Enter the airport code(arr_icao)\n")
+'''code=input("Enter the airport code(arr_icao)\n")
 params = {
     'access_key': '1d815a01512667373760dd9a41070d0f',
     'arr_icao': code,
@@ -23,7 +23,7 @@ def apiParameters(params):
        with open("GB1.json","w") as file:
          json.dump(data,file,indent=4)
          print("File saved")
-apiParameters(params=params)
+apiParameters(params=params)'''
 # function that will deal with all clients and will take clientsocket and address as parameter to seperate between each client(deal with all requests after checking credintials)
 def Clients(ClientSocket,address):
     print(f'connected to {address}')
@@ -61,11 +61,8 @@ def Clients(ClientSocket,address):
             Dictactual={'arrival':actual}
             DictTerminal={'terminal':terminal}
             Dictgate={'gate':gate}
-            ClientSocket.send(json.dumps(Dictiata,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictairport,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictactual,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictTerminal,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
+            data_to_send = [Dictiata,Dictairport,Dictactual,DictTerminal,Dictgate]
+            ClientSocket.sendall(json.dumps(data_to_send, indent=4).encode('utf-8'))
          if message=='2':
             print(f'name:{Namemessage} |type of request: All delayed flights (return flight IATA code, departure airport,\n original departure time, the estimated time of arrival), arrival terminal, delay, and arrival gate.')
             print(80*"-")
@@ -96,13 +93,8 @@ def Clients(ClientSocket,address):
             DictATerminal={'termianl':arrivalTerminal}
             DictADelay={'delay':arrivalDelay}
             Dictgate={'gate':gate}
-            ClientSocket.send(json.dumps(Dictiata,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictairport,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictDactual,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictestimated,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictATerminal,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictADelay,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictgate,indent=4).encode('utf-8'))
+            data_to_send = [Dictiata,Dictairport,DictDactual,Dictestimated,DictATerminal,DictADelay,Dictgate]
+            ClientSocket.sendall(json.dumps(data_to_send, indent=4).encode('utf-8'))
          if message=='3':
             print(f'name:{Namemessage} | type of request: All flights from a specific airport using the airport ICAO code (return flight IATA code, \n departure airport, original departure time, estimated arrival time, departure gate, arrival gate, and status).')
             print(80*"-")
@@ -137,13 +129,8 @@ def Clients(ClientSocket,address):
             DictDg={'gate':DepGate}
             DictAg={'gate':arrivalGate}
             Dictstatus={'status':status}
-            ClientSocket.send(json.dumps(Dictiata,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictairport,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictDactual,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictestimated,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictDg,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictAg,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictstatus,indent=4).encode('utf-8'))
+            data_to_send = [Dictiata,Dictairport,DictDactual,Dictestimated,DictDg,DictAg,Dictstatus]
+            ClientSocket.sendall(json.dumps(data_to_send, indent=4).encode('utf-8'))
          if message=='4':
             print(f'name:{Namemessage} |type of request: Details of a particular flight (return flight IATA code; \n departure airport,gate, and terminal; arrival airport, gate, and terminal; \n status; scheduled departure time; and scheduled arrival time).')
             print(80*"-")
@@ -188,16 +175,8 @@ def Clients(ClientSocket,address):
             Dictstatus={'status':status}
             DictSDT={'scheduled':scheduledDTime}
             DictSAT={'scheduled':scheduledATime}
-            ClientSocket.send(json.dumps(Dictiata,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictairport,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictDg,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictDterminal,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictAairport,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictAg,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictAt,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(Dictstatus,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictSDT,indent=4).encode('utf-8'))
-            ClientSocket.send(json.dumps(DictSAT,indent=4).encode('utf-8'))
+            data_to_send = [Dictiata,Dictairport,DictDg,DictDterminal,DictAairport,DictAg,DictAt,Dictstatus,DictSDT,DictSAT]
+            ClientSocket.sendall(json.dumps(data_to_send, indent=4).encode('utf-8'))
          if message=='5':
             print(f"Client {Namemessage} has disconnected")
             loop_control=False

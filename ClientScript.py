@@ -38,37 +38,45 @@ while option!='0':
   option=inputimeout(prompt="Enter option number:\n",timeout=240)
   client.send(option.encode('utf-8')) 
   if option=='1':
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(80*"-")
-    print()
+    dataRecieved=True
+    while dataRecieved:
+     data = client.recv(2048).decode('utf-8')
+     print(data)
+     if len(data) < 2048:
+       print(80 * "-")
+       print()
+       break
   if option=='2':
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(80*"-")
-    print()
+    dataRecieved=True
+    while dataRecieved:
+     data = client.recv(2048).decode('utf-8')
+     print(data)
+     if len(data) < 2048:
+       print(80 * "-")
+       print()
+       break
   if option=='3':
     message=input("Enter deparure airport:")
     client.send(message.encode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(80*"-")
-    print()
+    dataRecieved=True
+    while dataRecieved:
+     data = client.recv(2048).decode('utf-8')
+     print(data)
+     if len(data) < 2048:
+       print(80 * "-")
+       print()
+       break
   if option=='4':
     message=input("Enter the flight iata:")
     client.send(message.encode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(client.recv(2048).decode('utf-8'))
-    print(80*"-")
-    print()
+    dataRecieved=True
+    while dataRecieved:
+     data = client.recv(2048).decode('utf-8')
+     print(data)
+     if len(data) < 2048:
+       print(80 * "-")
+       print()
+       break
   if option=='5':
     break
    
