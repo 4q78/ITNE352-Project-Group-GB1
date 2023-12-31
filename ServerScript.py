@@ -33,6 +33,8 @@ def Clients(ClientSocket,address):
        Namemessage=ClientSocket.recv(1024).decode('utf-8')
        print(Namemessage)
        message=ClientSocket.recv(1024).decode('utf-8')
+       if message=="cntrl+c":
+        raise KeyboardInterrupt
        if not message or not Namemessage:
           raise socket.timeout
        loop_control=True
@@ -181,6 +183,8 @@ def Clients(ClientSocket,address):
             print(f"Client {Namemessage} has disconnected")
             loop_control=False
          message=ClientSocket.recv(1024).decode('utf-8')
+         if message=="cntrl+c":
+            raise KeyboardInterrupt
          if not message or not Namemessage:
           return 
        else:
@@ -191,6 +195,8 @@ def Clients(ClientSocket,address):
             return
     except ConnectionResetError: #handle client crash 
             print(f"Client {address} was forcibly closed or crashed. Closing the connection..." )
+    except KeyboardInterrupt:
+        print(f"Ctrl+C pressed by client {address}. Closing the connection...")
     finally: # whether we went through exception or not at last close the connection
        ClientSocket.close()
 # function to check clients credintials before accessing the server and it will be called at the beggining of the clients function that deal with the requests

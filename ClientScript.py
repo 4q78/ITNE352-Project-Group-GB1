@@ -29,7 +29,8 @@ while True:#login credintials exchange with the server
 name=inputimeout(prompt="Enter your name:", timeout=240) #inputimeout instead of regular input to help with user being inactive
 client.send(name.encode('utf-8'))
 option=input("press Enter to start\n")
-while option!='0':
+try:
+ while option!='0':
   print("1. print All Arrived flights")
   print("2. print All delayed flights")
   print("3. print All flights from a specific airport using the airport ICAO code  ")
@@ -79,5 +80,10 @@ while option!='0':
        break
   if option=='5':
     break
-   
-client.close()
+except ConnectionResetError: #handle client crash 
+ print("Client  was forcibly closed or crashed. Closing the connection..." ) 
+except KeyboardInterrupt:
+ client.send("cntrl+c".encode('utf-8'))
+ print("Closing connection...")
+finally:
+  client.close()  
